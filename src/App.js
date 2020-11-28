@@ -1,7 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-import login from "./views/login";
+import Login from "./views/login";
+import Signup from "./views/signup";
 
 function App() {
   return (
@@ -9,7 +10,8 @@ function App() {
       <Router>
         <div>
           <Switch>
-            <Route exact path="/login" component={login} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/signup" component={Signup} />
           </Switch>
         </div>
       </Router>

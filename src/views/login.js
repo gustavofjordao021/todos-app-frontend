@@ -10,13 +10,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import withStyles from "@material-ui/core/styles/withStyles";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-import axios from "axios";
-
-const baseURL = process.env.REACT_APP_FIREBASE_API_ENDPOINT;
-
-const service = axios.create({
-  baseURL,
-});
+import AUTH_SERVICE from "../services/AuthService";
 
 const styles = (theme) => ({
   paper: {
@@ -65,10 +59,7 @@ const Login = (props) => {
       email: emailState.email,
       password: passwordState.password,
     };
-    console.log("Service ===> ", service);
-    console.log("Endpoint ===> ", process.env.FIREBASE_API_ENDPOINT);
-    service
-      .post("/auth/login", userData)
+    AUTH_SERVICE.login(userData)
       .then((response) => {
         localStorage.setItem("AuthToken", `Bearer ${response.data.token}`);
         this.setState({
