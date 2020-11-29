@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
 import Avatar from "@material-ui/core/Avatar";
@@ -130,7 +131,7 @@ const Login = (props) => {
           >
             Sign In
             {loading && (
-              <CircularProgress size={30} className={classes.progress} />
+              <CircularProgress size={30} className={classes.progess} />
             )}
           </Button>
           <Grid container>

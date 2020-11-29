@@ -14,6 +14,13 @@ const AUTH_SERVICE = {
   login(userData) {
     return service.post("/auth/login", userData);
   },
+
+  auth(history) {
+    const authToken = localStorage.getItem("AuthToken");
+    if (authToken === null) {
+      history.push("/login");
+    }
+  },
 };
 
 export default AUTH_SERVICE;
