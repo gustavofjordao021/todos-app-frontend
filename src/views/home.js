@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 // import Todo from "../components/todo";
 // import Account from "../components/account";
@@ -87,7 +87,7 @@ const Home = (props) => {
     props.history.push("/login");
   };
 
-  let populateUserDetails = () => {
+  useEffect(() => {
     AUTH_SERVICE.auth(props.history);
     USER_SERVICE.retrieveUserDetails()
       .then((response) => {
@@ -98,8 +98,8 @@ const Home = (props) => {
           phoneNumber: response.data.userCredentials.phoneNumber,
           country: response.data.userCredentials.country,
           username: response.data.userCredentials.username,
-          uiLoading: false,
           profilePicture: response.data.userCredentials.imageUrl,
+          uiLoading: false,
         });
       })
       .catch((error) => {
@@ -111,7 +111,8 @@ const Home = (props) => {
           error: "Error in retrieving the data.",
         });
       });
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const { classes } = props;
   if (userDetailsState.uiLoading === true) {
@@ -144,17 +145,17 @@ const Home = (props) => {
           <Divider />
           <center>
             <Avatar
-              src={this.state.profilePicture}
+              src={userDetailsState.profilePicture}
               className={classes.avatar}
             />
             <p>
               {" "}
-              {this.state.firstName} {this.state.lastName}
+              {userDetailsState.firstName} {userDetailsState.lastName}
             </p>
           </center>
           <Divider />
           <List>
-            <ListItem button key="Todo" onClick={this.loadTodoPage}>
+            <ListItem button key="Todo" onClick={(e) => loadTodoPage(e)}>
               <ListItemIcon>
                 {" "}
                 <NotesIcon />{" "}
@@ -162,7 +163,7 @@ const Home = (props) => {
               <ListItemText primary="Todo" />
             </ListItem>
 
-            <ListItem button key="Account" onClick={this.loadAccountPage}>
+            <ListItem button key="Account" onClick={(e) => loadAccountPage(e)}>
               <ListItemIcon>
                 {" "}
                 <AccountBoxIcon />{" "}
@@ -170,7 +171,7 @@ const Home = (props) => {
               <ListItemText primary="Account" />
             </ListItem>
 
-            <ListItem button key="Logout" onClick={this.logoutHandler}>
+            <ListItem button key="Logout" onClick={(e) => logoutHandler(e)}>
               <ListItemIcon>
                 {" "}
                 <ExitToAppIcon />{" "}
@@ -180,7 +181,7 @@ const Home = (props) => {
           </List>
         </Drawer>
 
-        {/* <div>{this.state.render ? <Account /> : <Todo />}</div> */}
+        {/* <div>{lifecycleState.render ? <Account /> : <Todo />}</div> */}
       </div>
     );
   }

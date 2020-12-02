@@ -42,10 +42,8 @@ const styles = (theme) => ({
 });
 
 const Login = (props) => {
-  const [emailState, setEmailState] = useState({
+  const [credentialsState, setCredentialsState] = useState({
     email: "",
-  });
-  const [passwordState, setPasswordState] = useState({
     password: "",
   });
   const [lifecycleState, setLifecycleState] = useState({
@@ -57,17 +55,17 @@ const Login = (props) => {
     event.preventDefault();
     setLifecycleState({ errors: [], loading: true });
     const userData = {
-      email: emailState.email,
-      password: passwordState.password,
+      email: credentialsState.email,
+      password: credentialsState.password,
     };
     AUTH_SERVICE.login(userData)
       .then((response) => {
         localStorage.setItem("AuthToken", `Bearer ${response.data.token}`);
-        this.setState({
+        setLifecycleState({
           errors: [],
           loading: false,
         });
-        this.props.history.push("/");
+        return props.history.push("/");
       })
       .catch((error) => {
         setLifecycleState({
@@ -94,13 +92,18 @@ const Login = (props) => {
             required
             fullWidth
             id="email"
-            label="Email Address"
+            label="Email"
             name="email"
             autoComplete="email"
             autoFocus
             helperText={errors.email}
             error={errors.email ? true : false}
-            onChange={(e) => setEmailState({ email: e.target.value })}
+            onChange={(e) =>
+              setCredentialsState({
+                ...credentialsState,
+                email: e.target.value,
+              })
+            }
           />
           <TextField
             variant="outlined"
@@ -114,7 +117,12 @@ const Login = (props) => {
             autoComplete="current-password"
             helperText={errors.password}
             error={errors.password ? true : false}
-            onChange={(e) => setPasswordState({ password: e.target.value })}
+            onChange={(e) =>
+              setCredentialsState({
+                ...credentialsState,
+                password: e.target.value,
+              })
+            }
           />
           <Button
             type="submit"
@@ -125,8 +133,8 @@ const Login = (props) => {
             onClick={(e) => handleSubmit(e)}
             disabled={
               lifecycleState.loading ||
-              !emailState.email ||
-              !passwordState.password
+              !credentialsState.email ||
+              !credentialsState.password
             }
           >
             Sign In
