@@ -12,7 +12,6 @@ const AUTH_SERVICE = {
   },
 
   login(userData) {
-    console.log(userData);
     return service.post("/auth/login", userData);
   },
 

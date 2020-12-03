@@ -72,9 +72,9 @@ const Signup = (props) => {
     };
     AUTH_SERVICE.signup(newUserData)
       .then((response) => {
-        localStorage.setItem("AuthToken", `${response.data.token}`);
+        localStorage.setItem("AuthToken", `Bearer ${response.data.token}`);
         setLifecycleState({ ...lifecycleState, loading: false });
-        this.props.history.push("/");
+        return props.history.push("/");
       })
       .catch((error) => {
         setLifecycleState({
