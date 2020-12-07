@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
-// import Todo from "../components/todo";
-// import Account from "../components/account";
+import Todo from "../views/todo";
+import Account from "../views/account";
 
 import List from "@material-ui/core/List";
 import Avatar from "@material-ui/core/avatar";
@@ -181,7 +181,7 @@ const Home = (props) => {
           </List>
         </Drawer>
 
-        {/* <div>{lifecycleState.render ? <Account /> : <Todo />}</div> */}
+        <div>{lifecycleState.render ? <Account /> : <Todo />}</div>
       </div>
     );
   }

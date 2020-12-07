@@ -199,7 +199,7 @@ const Signup = (props) => {
                 className={classes.formControl}
               >
                 <InputLabel id="demo-simple-select-outlined-label">
-                  Age
+                  Country
                 </InputLabel>
                 <Select
                   variant="outlined"
