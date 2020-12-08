@@ -19,8 +19,6 @@ import USER_SERVICE from "../services/UserService";
 
 import clsx from "clsx";
 
-import { authMiddleWare } from "../util/auth";
-
 const styles = (theme) => ({
   content: {
     flexGrow: 1,
@@ -125,17 +123,8 @@ const Account = (props) => {
         ...lifecycleState,
         uiLoading: true,
       });
-      AUTH_SERVICE.auth(props.history);      
-      let form_data = new FormData();
-      form_data.append("image", this.state.image);
-      form_data.append("content", this.state.content);
-      axios.defaults.headers.common = { Authorization: `${authToken}` };
-      axios
-        .post("/user/image", form_data, {
-          headers: {
-            "content-type": "multipart/form-data",
-          },
-        })
+      AUTH_SERVICE.auth(props.history);
+      USER_SERVICE.uploadProfileImage({image: userDetailsState.profilePicture,})      
         .then(() => {
           window.location.reload();
         })

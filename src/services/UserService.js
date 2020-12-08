@@ -12,6 +12,12 @@ const USER_SERVICE = {
     service.defaults.headers.common = { Authorization: `${authToken}` };
     return service.get("/auth/profile");
   },
+
+  uploadProfileImage(imageData) {
+    const authToken = localStorage.getItem("AuthToken");
+    service.defaults.headers.common = { Authorization: `${authToken}` };
+    return service.post("/auth/signup/image", imageData);
+  },
 };
 
 export default USER_SERVICE;
