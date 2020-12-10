@@ -6,17 +6,27 @@ const service = axios.create({
   baseURL,
 });
 
+let getUserToken = () => {
+  const authToken = localStorage.getItem("AuthToken");
+  service.defaults.headers.common = { Authorization: `${authToken}` };
+};
+
 const USER_SERVICE = {
+  updateUserDetails(userData) {
+    getUserToken();
+    return service.post("/auth/profile/update", userData);
+  },
+
   retrieveUserDetails() {
-    const authToken = localStorage.getItem("AuthToken");
-    service.defaults.headers.common = { Authorization: `${authToken}` };
+    getUserToken();
     return service.get("/auth/profile");
   },
 
   uploadProfileImage(imageData) {
-    const authToken = localStorage.getItem("AuthToken");
-    service.defaults.headers.common = { Authorization: `${authToken}` };
-    return service.post("/auth/signup/image", imageData);
+    getUserToken();
+    return service.post("/auth/signup/image", imageData, {
+      headers: "multipart/form-data",
+    });
   },
 };
 
