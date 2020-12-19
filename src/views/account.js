@@ -325,9 +325,7 @@ const Account = (props) => {
                     variant="outlined"
                     className={classes.formControl}
                   >
-                    <InputLabel id="demo-simple-select-outlined-label">
-                      Country
-                    </InputLabel>
+                    <InputLabel>Country</InputLabel>
                     <Select
                       variant="outlined"
                       required
@@ -644,7 +642,6 @@ const Account = (props) => {
                 </Grid>
               </Grid>
             </CardContent>
-            <Divider />
             <CardActions />
           </form>
         </Card>
