@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import Todo from "../views/todo";
+import Todo from "./todo";
 import Account from "../views/account";
 
 import List from "@material-ui/core/List";

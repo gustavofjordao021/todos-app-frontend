@@ -1,51 +1,25 @@
 import React, { useState } from "react";
 
-import Grid from "@material-ui/core/Grid";
-import Link from "@material-ui/core/Link";
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import Container from "@material-ui/core/Container";
-import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
-import withStyles from "@material-ui/core/styles/withStyles";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from "@material-ui/core/FormControl";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import {
+  Box,
+  Flex,
+  Icon,
+  Input,
+  Button,
+  Heading,
+  FormLabel,
+  InputGroup,
+  FormControl,
+  CircularProgress,
+  InputRightElement,
+} from "@chakra-ui/react";
+
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
 import AUTH_SERVICE from "../services/AuthService";
 
-const styles = (theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-  progess: {
-    position: "absolute",
-  },
-});
-
 const Signup = (props) => {
   const [signupDetailsState, setSignupDetailsState] = useState({
-    firstName: "",
-    lastName: "",
-    phoneNumber: "",
-    country: "",
     username: "",
     email: "",
     password: "",
@@ -57,14 +31,37 @@ const Signup = (props) => {
     loading: false,
   });
 
+  const [showPasswordState, setShowPasswordState] = useState({
+    isPasswordVisible: false,
+    isConfirmPasswordVisible: false,
+  });
+
+  let handlePasswordVisibility = () => {
+    showPasswordState.isPasswordVisible
+      ? setShowPasswordState({ ...showPasswordState, isPasswordVisible: false })
+      : setShowPasswordState({ ...showPasswordState, isPasswordVisible: true });
+  };
+
+  let handleConfirmPasswordVisibility = () => {
+    showPasswordState.isConfirmPasswordVisible
+      ? setShowPasswordState({
+          ...showPasswordState,
+          isConfirmPasswordVisible: false,
+        })
+      : setShowPasswordState({
+          ...showPasswordState,
+          isConfirmPasswordVisible: true,
+        });
+  };
+
+  let handlePushToLogin = () => {
+    return props.history.push("/login");
+  };
+
   let handleSubmit = (event) => {
     event.preventDefault();
     setLifecycleState({ ...lifecycleState, loading: true });
     const newUserData = {
-      firstName: signupDetailsState.firstName,
-      lastName: signupDetailsState.lastName,
-      phoneNumber: signupDetailsState.phoneNumber,
-      country: signupDetailsState.country,
       username: signupDetailsState.username,
       email: signupDetailsState.email,
       password: signupDetailsState.password,
@@ -84,493 +81,134 @@ const Signup = (props) => {
       });
   };
 
-  const { classes } = props;
-  const { errors, loading } = lifecycleState;
+  const { loading } = lifecycleState;
+  const { isPasswordVisible, isConfirmPasswordVisible } = showPasswordState;
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}></Avatar>
-        <Typography component="h1" variant="h5">
-          Sign up
-        </Typography>
-        <form className={classes.form} noValidate>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="firstName"
-                label="First Name"
-                name="firstName"
-                autoComplete="firstName"
-                helperText={errors.firstName}
-                error={errors.firstName ? true : false}
-                onChange={(e) =>
+    <Flex h="100vh" w="100%" align="center" justifyContent="center">
+      <Box
+        p={10}
+        w="25rem"
+        maxWidth="500px"
+        borderWidth={1}
+        borderRadius={8}
+        boxShadow="lg"
+      >
+        <Box textAlign="center">
+          <Heading>Signup</Heading>
+        </Box>
+        <Box my={4} textAlign="left">
+          <form onSubmit={(e) => handleSubmit(e)}>
+            <FormControl isRequired>
+              <FormLabel>Email</FormLabel>
+              <Input
+                type="email"
+                placeholder="test@test.com"
+                size="lg"
+                onChange={(event) =>
                   setSignupDetailsState({
                     ...signupDetailsState,
-                    firstName: e.target.value,
+                    email: event.target.value,
                   })
                 }
               />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="lastName"
-                helperText={errors.lastName}
-                error={errors.lastName ? true : false}
-                onChange={(e) =>
+            </FormControl>
+            <FormControl isRequired mt={4}>
+              <FormLabel>Username</FormLabel>
+              <Input
+                type="text"
+                placeholder="Username"
+                size="lg"
+                onChange={(event) =>
                   setSignupDetailsState({
                     ...signupDetailsState,
-                    lastName: e.target.value,
+                    username: event.target.value,
                   })
                 }
               />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="username"
-                label="User Name"
-                name="username"
-                autoComplete="username"
-                helperText={errors.username}
-                error={errors.username ? true : false}
-                onChange={(e) =>
-                  setSignupDetailsState({
-                    ...signupDetailsState,
-                    username: e.target.value,
-                  })
-                }
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="phoneNumber"
-                label="Phone Number"
-                name="phoneNumber"
-                autoComplete="phoneNumber"
-                pattern="[7-9]{1}[0-9]{9}"
-                helperText={errors.phoneNumber}
-                error={errors.phoneNumber ? true : false}
-                onChange={(e) =>
-                  setSignupDetailsState({
-                    ...signupDetailsState,
-                    phoneNumber: e.target.value,
-                  })
-                }
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                helperText={errors.email}
-                error={errors.email ? true : false}
-                onChange={(e) =>
-                  setSignupDetailsState({
-                    ...signupDetailsState,
-                    email: e.target.value,
-                  })
-                }
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormControl
-                fullWidth
-                variant="outlined"
-                className={classes.formControl}
-              >
-                <InputLabel id="demo-simple-select-outlined-label">
-                  Country
-                </InputLabel>
-                <Select
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="country"
-                  label="Country"
-                  name="country"
-                  autoComplete="country"
-                  helperText={errors.country}
-                  onChange={(e) =>
+            </FormControl>
+            <FormControl isRequired mt={4}>
+              <FormLabel>Password</FormLabel>
+              <InputGroup>
+                <Input
+                  type={isPasswordVisible ? "text" : "password"}
+                  placeholder="*******"
+                  size="lg"
+                  onChange={(event) =>
                     setSignupDetailsState({
                       ...signupDetailsState,
-                      country: e.target.value,
+                      password: event.target.value,
                     })
                   }
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value="Afganistan">Afghanistan</MenuItem>
-                  <MenuItem value="Albania">Albania</MenuItem>
-                  <MenuItem value="Algeria">Algeria</MenuItem>
-                  <MenuItem value="American Samoa">American Samoa</MenuItem>
-                  <MenuItem value="Andorra">Andorra</MenuItem>
-                  <MenuItem value="Angola">Angola</MenuItem>
-                  <MenuItem value="Anguilla">Anguilla</MenuItem>
-                  <MenuItem value="Antigua & Barbuda">
-                    Antigua & Barbuda
-                  </MenuItem>
-                  <MenuItem value="Argentina">Argentina</MenuItem>
-                  <MenuItem value="Armenia">Armenia</MenuItem>
-                  <MenuItem value="Aruba">Aruba</MenuItem>
-                  <MenuItem value="Australia">Australia</MenuItem>
-                  <MenuItem value="Austria">Austria</MenuItem>
-                  <MenuItem value="Azerbaijan">Azerbaijan</MenuItem>
-                  <MenuItem value="Bahamas">Bahamas</MenuItem>
-                  <MenuItem value="Bahrain">Bahrain</MenuItem>
-                  <MenuItem value="Bangladesh">Bangladesh</MenuItem>
-                  <MenuItem value="Barbados">Barbados</MenuItem>
-                  <MenuItem value="Belarus">Belarus</MenuItem>
-                  <MenuItem value="Belgium">Belgium</MenuItem>
-                  <MenuItem value="Belize">Belize</MenuItem>
-                  <MenuItem value="Benin">Benin</MenuItem>
-                  <MenuItem value="Bermuda">Bermuda</MenuItem>
-                  <MenuItem value="Bhutan">Bhutan</MenuItem>
-                  <MenuItem value="Bolivia">Bolivia</MenuItem>
-                  <MenuItem value="Bonaire">Bonaire</MenuItem>
-                  <MenuItem value="Bosnia & Herzegovina">
-                    Bosnia & Herzegovina
-                  </MenuItem>
-                  <MenuItem value="Botswana">Botswana</MenuItem>
-                  <MenuItem value="Brazil">Brazil</MenuItem>
-                  <MenuItem value="Brunei">Brunei</MenuItem>
-                  <MenuItem value="Bulgaria">Bulgaria</MenuItem>
-                  <MenuItem value="Burkina Faso">Burkina Faso</MenuItem>
-                  <MenuItem value="Burundi">Burundi</MenuItem>
-                  <MenuItem value="Cambodia">Cambodia</MenuItem>
-                  <MenuItem value="Cameroon">Cameroon</MenuItem>
-                  <MenuItem value="Canada">Canada</MenuItem>
-                  <MenuItem value="Canary Islands">Canary Islands</MenuItem>
-                  <MenuItem value="Cape Verde">Cape Verde</MenuItem>
-                  <MenuItem value="Cayman Islands">Cayman Islands</MenuItem>
-                  <MenuItem value="Central African Republic">
-                    Central African Republic
-                  </MenuItem>
-                  <MenuItem value="Chad">Chad</MenuItem>
-                  <MenuItem value="Channel Islands">Channel Islands</MenuItem>
-                  <MenuItem value="Chile">Chile</MenuItem>
-                  <MenuItem value="China">China</MenuItem>
-                  <MenuItem value="Christmas Island">Christmas Island</MenuItem>
-                  <MenuItem value="Cocos Island">Cocos Island</MenuItem>
-                  <MenuItem value="Colombia">Colombia</MenuItem>
-                  <MenuItem value="Comoros">Comoros</MenuItem>
-                  <MenuItem value="Congo">Congo</MenuItem>
-                  <MenuItem value="Cook Islands">Cook Islands</MenuItem>
-                  <MenuItem value="Costa Rica">Costa Rica</MenuItem>
-                  <MenuItem value="Cote DIvoire">Cote DIvoire</MenuItem>
-                  <MenuItem value="Croatia">Croatia</MenuItem>
-                  <MenuItem value="Cuba">Cuba</MenuItem>
-                  <MenuItem value="Curaco">Curacao</MenuItem>
-                  <MenuItem value="Cyprus">Cyprus</MenuItem>
-                  <MenuItem value="Czech Republic">Czech Republic</MenuItem>
-                  <MenuItem value="Denmark">Denmark</MenuItem>
-                  <MenuItem value="Djibouti">Djibouti</MenuItem>
-                  <MenuItem value="Dominica">Dominica</MenuItem>
-                  <MenuItem value="Dominican Republic">
-                    Dominican Republic
-                  </MenuItem>
-                  <MenuItem value="East Timor">East Timor</MenuItem>
-                  <MenuItem value="Ecuador">Ecuador</MenuItem>
-                  <MenuItem value="Egypt">Egypt</MenuItem>
-                  <MenuItem value="El Salvador">El Salvador</MenuItem>
-                  <MenuItem value="Equatorial Guinea">
-                    Equatorial Guinea
-                  </MenuItem>
-                  <MenuItem value="Eritrea">Eritrea</MenuItem>
-                  <MenuItem value="Estonia">Estonia</MenuItem>
-                  <MenuItem value="Ethiopia">Ethiopia</MenuItem>
-                  <MenuItem value="Falkland Islands">Falkland Islands</MenuItem>
-                  <MenuItem value="Faroe Islands">Faroe Islands</MenuItem>
-                  <MenuItem value="Fiji">Fiji</MenuItem>
-                  <MenuItem value="Finland">Finland</MenuItem>
-                  <MenuItem value="France">France</MenuItem>
-                  <MenuItem value="French Guiana">French Guiana</MenuItem>
-                  <MenuItem value="French Polynesia">French Polynesia</MenuItem>
-                  <MenuItem value="Gabon">Gabon</MenuItem>
-                  <MenuItem value="Gambia">Gambia</MenuItem>
-                  <MenuItem value="Georgia">Georgia</MenuItem>
-                  <MenuItem value="Germany">Germany</MenuItem>
-                  <MenuItem value="Ghana">Ghana</MenuItem>
-                  <MenuItem value="Gibraltar">Gibraltar</MenuItem>
-                  <MenuItem value="Great Britain">Great Britain</MenuItem>
-                  <MenuItem value="Greece">Greece</MenuItem>
-                  <MenuItem value="Greenland">Greenland</MenuItem>
-                  <MenuItem value="Grenada">Grenada</MenuItem>
-                  <MenuItem value="Guadeloupe">Guadeloupe</MenuItem>
-                  <MenuItem value="Guam">Guam</MenuItem>
-                  <MenuItem value="Guatemala">Guatemala</MenuItem>
-                  <MenuItem value="Guinea">Guinea</MenuItem>
-                  <MenuItem value="Guyana">Guyana</MenuItem>
-                  <MenuItem value="Haiti">Haiti</MenuItem>
-                  <MenuItem value="Hawaii">Hawaii</MenuItem>
-                  <MenuItem value="Honduras">Honduras</MenuItem>
-                  <MenuItem value="Hong Kong">Hong Kong</MenuItem>
-                  <MenuItem value="Hungary">Hungary</MenuItem>
-                  <MenuItem value="Iceland">Iceland</MenuItem>
-                  <MenuItem value="Indonesia">Indonesia</MenuItem>
-                  <MenuItem value="India">India</MenuItem>
-                  <MenuItem value="Iran">Iran</MenuItem>
-                  <MenuItem value="Iraq">Iraq</MenuItem>
-                  <MenuItem value="Ireland">Ireland</MenuItem>
-                  <MenuItem value="Isle of Man">Isle of Man</MenuItem>
-                  <MenuItem value="Israel">Israel</MenuItem>
-                  <MenuItem value="Italy">Italy</MenuItem>
-                  <MenuItem value="Jamaica">Jamaica</MenuItem>
-                  <MenuItem value="Japan">Japan</MenuItem>
-                  <MenuItem value="Jordan">Jordan</MenuItem>
-                  <MenuItem value="Kazakhstan">Kazakhstan</MenuItem>
-                  <MenuItem value="Kenya">Kenya</MenuItem>
-                  <MenuItem value="Kiribati">Kiribati</MenuItem>
-                  <MenuItem value="Korea North">Korea North</MenuItem>
-                  <MenuItem value="Korea Sout">Korea South</MenuItem>
-                  <MenuItem value="Kuwait">Kuwait</MenuItem>
-                  <MenuItem value="Kyrgyzstan">Kyrgyzstan</MenuItem>
-                  <MenuItem value="Laos">Laos</MenuItem>
-                  <MenuItem value="Latvia">Latvia</MenuItem>
-                  <MenuItem value="Lebanon">Lebanon</MenuItem>
-                  <MenuItem value="Lesotho">Lesotho</MenuItem>
-                  <MenuItem value="Liberia">Liberia</MenuItem>
-                  <MenuItem value="Libya">Libya</MenuItem>
-                  <MenuItem value="Liechtenstein">Liechtenstein</MenuItem>
-                  <MenuItem value="Lithuania">Lithuania</MenuItem>
-                  <MenuItem value="Luxembourg">Luxembourg</MenuItem>
-                  <MenuItem value="Macau">Macau</MenuItem>
-                  <MenuItem value="Macedonia">Macedonia</MenuItem>
-                  <MenuItem value="Madagascar">Madagascar</MenuItem>
-                  <MenuItem value="Malaysia">Malaysia</MenuItem>
-                  <MenuItem value="Malawi">Malawi</MenuItem>
-                  <MenuItem value="Maldives">Maldives</MenuItem>
-                  <MenuItem value="Mali">Mali</MenuItem>
-                  <MenuItem value="Malta">Malta</MenuItem>
-                  <MenuItem value="Marshall Islands">Marshall Islands</MenuItem>
-                  <MenuItem value="Martinique">Martinique</MenuItem>
-                  <MenuItem value="Mauritania">Mauritania</MenuItem>
-                  <MenuItem value="Mauritius">Mauritius</MenuItem>
-                  <MenuItem value="Mayotte">Mayotte</MenuItem>
-                  <MenuItem value="Mexico">Mexico</MenuItem>
-                  <MenuItem value="Midway Islands">Midway Islands</MenuItem>
-                  <MenuItem value="Moldova">Moldova</MenuItem>
-                  <MenuItem value="Monaco">Monaco</MenuItem>
-                  <MenuItem value="Mongolia">Mongolia</MenuItem>
-                  <MenuItem value="Montserrat">Montserrat</MenuItem>
-                  <MenuItem value="Morocco">Morocco</MenuItem>
-                  <MenuItem value="Mozambique">Mozambique</MenuItem>
-                  <MenuItem value="Myanmar">Myanmar</MenuItem>
-                  <MenuItem value="Nambia">Nambia</MenuItem>
-                  <MenuItem value="Nauru">Nauru</MenuItem>
-                  <MenuItem value="Nepal">Nepal</MenuItem>
-                  <MenuItem value="Antilles">Antilles</MenuItem>
-                  <MenuItem value="Netherlands">Netherlands</MenuItem>
-                  <MenuItem value="Nevis">Nevis</MenuItem>
-                  <MenuItem value="New Caledonia">New Caledonia</MenuItem>
-                  <MenuItem value="New Zealand">New Zealand</MenuItem>
-                  <MenuItem value="Nicaragua">Nicaragua</MenuItem>
-                  <MenuItem value="Niger">Niger</MenuItem>
-                  <MenuItem value="Nigeria">Nigeria</MenuItem>
-                  <MenuItem value="Niue">Niue</MenuItem>
-                  <MenuItem value="Norfolk Island">Norfolk Island</MenuItem>
-                  <MenuItem value="Norway">Norway</MenuItem>
-                  <MenuItem value="Oman">Oman</MenuItem>
-                  <MenuItem value="Pakistan">Pakistan</MenuItem>
-                  <MenuItem value="Palau Island">Palau Island</MenuItem>
-                  <MenuItem value="Palestine">Palestine</MenuItem>
-                  <MenuItem value="Panama">Panama</MenuItem>
-                  <MenuItem value="Papua New Guinea">Papua New Guinea</MenuItem>
-                  <MenuItem value="Paraguay">Paraguay</MenuItem>
-                  <MenuItem value="Peru">Peru</MenuItem>
-                  <MenuItem value="Phillipines">Philippines</MenuItem>
-                  <MenuItem value="Pitcairn Island">Pitcairn Island</MenuItem>
-                  <MenuItem value="Poland">Poland</MenuItem>
-                  <MenuItem value="Portugal">Portugal</MenuItem>
-                  <MenuItem value="Puerto Rico">Puerto Rico</MenuItem>
-                  <MenuItem value="Qatar">Qatar</MenuItem>
-                  <MenuItem value="Republic of Montenegro">
-                    Republic of Montenegro
-                  </MenuItem>
-                  <MenuItem value="Republic of Serbia">
-                    Republic of Serbia
-                  </MenuItem>
-                  <MenuItem value="Reunion">Reunion</MenuItem>
-                  <MenuItem value="Romania">Romania</MenuItem>
-                  <MenuItem value="Russia">Russia</MenuItem>
-                  <MenuItem value="Rwanda">Rwanda</MenuItem>
-                  <MenuItem value="St. Barthelemy">St. Barthelemy</MenuItem>
-                  <MenuItem value="St. Eustatius">St. Eustatius</MenuItem>
-                  <MenuItem value="St. Helena">St. Helena</MenuItem>
-                  <MenuItem value="St. Kitts-Nevis">St. Kitts-Nevis</MenuItem>
-                  <MenuItem value="St. Lucia">St. Lucia</MenuItem>
-                  <MenuItem value="St. Maarten">St. Maarten</MenuItem>
-                  <MenuItem value="St. Pierre & Miquelon">
-                    St. Pierre & Miquelon
-                  </MenuItem>
-                  <MenuItem value="St. Vincent & Grenadines">
-                    St. Vincent & Grenadines
-                  </MenuItem>
-                  <MenuItem value="Saipan">Saipan</MenuItem>
-                  <MenuItem value="Samoa">Samoa</MenuItem>
-                  <MenuItem value="Samoa American">Samoa American</MenuItem>
-                  <MenuItem value="San Marino">San Marino</MenuItem>
-                  <MenuItem value="Sao Tome & Principe">
-                    Sao Tome & Principe
-                  </MenuItem>
-                  <MenuItem value="Saudi Arabia">Saudi Arabia</MenuItem>
-                  <MenuItem value="Senegal">Senegal</MenuItem>
-                  <MenuItem value="Seychelles">Seychelles</MenuItem>
-                  <MenuItem value="Sierra Leone">Sierra Leone</MenuItem>
-                  <MenuItem value="Singapore">Singapore</MenuItem>
-                  <MenuItem value="Slovakia">Slovakia</MenuItem>
-                  <MenuItem value="Slovenia">Slovenia</MenuItem>
-                  <MenuItem value="Solomon Islands">Solomon Islands</MenuItem>
-                  <MenuItem value="Somalia">Somalia</MenuItem>
-                  <MenuItem value="South Africa">South Africa</MenuItem>
-                  <MenuItem value="Spain">Spain</MenuItem>
-                  <MenuItem value="Sri Lanka">Sri Lanka</MenuItem>
-                  <MenuItem value="Sudan">Sudan</MenuItem>
-                  <MenuItem value="Suriname">Suriname</MenuItem>
-                  <MenuItem value="Swaziland">Swaziland</MenuItem>
-                  <MenuItem value="Sweden">Sweden</MenuItem>
-                  <MenuItem value="Switzerland">Switzerland</MenuItem>
-                  <MenuItem value="Syria">Syria</MenuItem>
-                  <MenuItem value="Tahiti">Tahiti</MenuItem>
-                  <MenuItem value="Taiwan">Taiwan</MenuItem>
-                  <MenuItem value="Tajikistan">Tajikistan</MenuItem>
-                  <MenuItem value="Tanzania">Tanzania</MenuItem>
-                  <MenuItem value="Thailand">Thailand</MenuItem>
-                  <MenuItem value="Togo">Togo</MenuItem>
-                  <MenuItem value="Tokelau">Tokelau</MenuItem>
-                  <MenuItem value="Tonga">Tonga</MenuItem>
-                  <MenuItem value="Trinidad & Tobago">
-                    Trinidad & Tobago
-                  </MenuItem>
-                  <MenuItem value="Tunisia">Tunisia</MenuItem>
-                  <MenuItem value="Turkey">Turkey</MenuItem>
-                  <MenuItem value="Turkmenistan">Turkmenistan</MenuItem>
-                  <MenuItem value="Turks & Caicos Is">
-                    Turks & Caicos Is
-                  </MenuItem>
-                  <MenuItem value="Tuvalu">Tuvalu</MenuItem>
-                  <MenuItem value="Uganda">Uganda</MenuItem>
-                  <MenuItem value="United Kingdom">United Kingdom</MenuItem>
-                  <MenuItem value="Ukraine">Ukraine</MenuItem>
-                  <MenuItem value="United Arab Erimates">
-                    United Arab Emirates
-                  </MenuItem>
-                  <MenuItem value="United States of America">
-                    United States of America
-                  </MenuItem>
-                  <MenuItem value="Uraguay">Uruguay</MenuItem>
-                  <MenuItem value="Uzbekistan">Uzbekistan</MenuItem>
-                  <MenuItem value="Vanuatu">Vanuatu</MenuItem>
-                  <MenuItem value="Vatican City State">
-                    Vatican City State
-                  </MenuItem>
-                  <MenuItem value="Venezuela">Venezuela</MenuItem>
-                  <MenuItem value="Vietnam">Vietnam</MenuItem>
-                  <MenuItem value="Virgin Islands (USA)">
-                    Virgin Islands (USA)
-                  </MenuItem>
-                  <MenuItem value="Wake Island">Wake Island</MenuItem>
-                  <MenuItem value="Yemen">Yemen</MenuItem>
-                  <MenuItem value="Zaire">Zaire</MenuItem>
-                  <MenuItem value="Zambia">Zambia</MenuItem>
-                  <MenuItem value="Zimbabwe">Zimbabwe</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                helperText={errors.password}
-                error={errors.password ? true : false}
-                onChange={(e) =>
-                  setSignupDetailsState({
-                    ...signupDetailsState,
-                    password: e.target.value,
-                  })
-                }
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="confirmPassword"
-                label="Confirm Password"
-                type="password"
-                id="confirmPassword"
-                autoComplete="current-password"
-                onChange={(e) =>
-                  setSignupDetailsState({
-                    ...signupDetailsState,
-                    confirmPassword: e.target.value,
-                  })
-                }
-              />
-            </Grid>
-          </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            onClick={(e) => handleSubmit(e)}
-            disabled={
-              loading ||
-              !signupDetailsState.email ||
-              !signupDetailsState.password ||
-              !signupDetailsState.firstName ||
-              !signupDetailsState.lastName ||
-              !signupDetailsState.country ||
-              !signupDetailsState.username ||
-              !signupDetailsState.phoneNumber ||
-              !signupDetailsState.confirmPassword
-            }
-          >
-            Sign Up
-            {loading && (
-              <CircularProgress size={30} className={classes.progess} />
-            )}
-          </Button>
-          <Grid container justify="flex-end">
-            <Grid item>
-              <Link href="login" variant="body2">
-                Already have an account? Sign in
-              </Link>
-            </Grid>
-          </Grid>
-        </form>
-      </div>
-    </Container>
+                />
+                <InputRightElement w="3rem" h="100%">
+                  <Button
+                    h="1.5rem"
+                    size="sm"
+                    onClick={() => handlePasswordVisibility()}
+                  >
+                    {isPasswordVisible ? (
+                      <Icon as={ViewOffIcon} />
+                    ) : (
+                      <Icon as={ViewIcon} />
+                    )}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
+            </FormControl>
+            <FormControl isRequired mt={4}>
+              <FormLabel>Confirm password</FormLabel>
+              <InputGroup>
+                <Input
+                  type={isConfirmPasswordVisible ? "text" : "password"}
+                  placeholder="*******"
+                  size="lg"
+                  onChange={(event) =>
+                    setSignupDetailsState({
+                      ...signupDetailsState,
+                      confirmPassword: event.target.value,
+                    })
+                  }
+                />
+                <InputRightElement w="3rem" h="100%">
+                  <Button
+                    h="1.5rem"
+                    size="sm"
+                    onClick={() => handleConfirmPasswordVisibility()}
+                  >
+                    {isConfirmPasswordVisible ? (
+                      <Icon as={ViewOffIcon} />
+                    ) : (
+                      <Icon as={ViewIcon} />
+                    )}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
+            </FormControl>
+            <Button
+              isLoading={loading}
+              loadingText="Submitting"
+              variantColor="blue"
+              variant="solid"
+              type="submit"
+              width="full"
+              mt={4}
+            >
+              Signup
+            </Button>
+            <Button
+              variantColor="teal"
+              variant="outline"
+              width="full"
+              mt={4}
+              onClick={() => handlePushToLogin()}
+            >
+              Login
+            </Button>
+          </form>
+        </Box>
+      </Box>
+    </Flex>
   );
 };
 
-export default withStyles(styles)(Signup);
+export default Signup;

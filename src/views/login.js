@@ -7,10 +7,10 @@ import {
   Input,
   Button,
   Heading,
+  useToast,
   FormLabel,
   InputGroup,
   FormControl,
-  CircularProgress,
   InputRightElement,
 } from "@chakra-ui/react";
 
@@ -37,6 +37,10 @@ const Login = (props) => {
       : setShowPasswordState({ isVisible: true });
   };
 
+  let handlePushToSignup = () => {
+    return props.history.push("/signup");
+  };
+
   let handleSubmit = (event) => {
     event.preventDefault();
     setLifecycleState({ errors: [], loading: true });
@@ -61,7 +65,8 @@ const Login = (props) => {
       });
   };
 
-  const { loading } = lifecycleState;
+  const toast = useToast();
+  const { errors, loading } = lifecycleState;
   const { isVisible } = showPasswordState;
   return (
     <Flex h="100vh" w="100%" align="center" justifyContent="center">
@@ -122,17 +127,33 @@ const Login = (props) => {
               </InputGroup>
             </FormControl>
             <Button
-              variantColor="teal"
-              variant="outline"
+              isLoading={loading}
+              loadingText="Submitting"
+              variantColor="blue"
+              variant="solid"
               type="submit"
               width="full"
               mt={4}
             >
-              {loading ? (
-                <CircularProgress isIndeterminate size="24px" color="teal" />
-              ) : (
-                "Sign In"
-              )}
+              Login
+            </Button>
+            {Object.keys(errors).length > 0
+              ? toast({
+                  title: "Ops, something went wrong.",
+                  description: `${errors.general}`,
+                  status: "error",
+                  duration: 9000,
+                  isClosable: true,
+                })
+              : ""}
+            <Button
+              variantColor="teal"
+              variant="outline"
+              width="full"
+              mt={4}
+              onClick={() => handlePushToSignup()}
+            >
+              Signup
             </Button>
           </form>
         </Box>
