@@ -1,45 +1,22 @@
 import React, { useState } from "react";
 
-import Grid from "@material-ui/core/Grid";
-import Link from "@material-ui/core/Link";
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Container from "@material-ui/core/Container";
-import Typography from "@material-ui/core/Typography";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import withStyles from "@material-ui/core/styles/withStyles";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import {
+  Box,
+  Flex,
+  Icon,
+  Input,
+  Button,
+  Heading,
+  FormLabel,
+  InputGroup,
+  FormControl,
+  CircularProgress,
+  InputRightElement,
+} from "@chakra-ui/react";
+
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
 import AUTH_SERVICE from "../services/AuthService";
-
-const styles = (theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: "100%",
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-  customError: {
-    color: "red",
-    fontSize: "0.8rem",
-    marginTop: 10,
-  },
-  progess: {
-    position: "absolute",
-  },
-});
 
 const Login = (props) => {
   const [credentialsState, setCredentialsState] = useState({
@@ -50,6 +27,15 @@ const Login = (props) => {
     errors: [],
     loading: false,
   });
+  const [showPasswordState, setShowPasswordState] = useState({
+    isVisible: false,
+  });
+
+  let handlePasswordVisibility = () => {
+    showPasswordState.isVisible
+      ? setShowPasswordState({ isVisible: false })
+      : setShowPasswordState({ isVisible: true });
+  };
 
   let handleSubmit = (event) => {
     event.preventDefault();
@@ -75,89 +61,84 @@ const Login = (props) => {
       });
   };
 
-  const { classes } = props;
-  const { errors, loading } = lifecycleState;
+  const { loading } = lifecycleState;
+  const { isVisible } = showPasswordState;
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}></Avatar>
-        <Typography component="h1" variant="h5">
-          Login
-        </Typography>
-        <form className={classes.form} noValidate>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            helperText={errors.email}
-            error={errors.email ? true : false}
-            onChange={(e) =>
-              setCredentialsState({
-                ...credentialsState,
-                email: e.target.value,
-              })
-            }
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            helperText={errors.password}
-            error={errors.password ? true : false}
-            onChange={(e) =>
-              setCredentialsState({
-                ...credentialsState,
-                password: e.target.value,
-              })
-            }
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            onClick={(e) => handleSubmit(e)}
-            disabled={
-              lifecycleState.loading ||
-              !credentialsState.email ||
-              !credentialsState.password
-            }
-          >
-            Sign In
-            {loading && (
-              <CircularProgress size={30} className={classes.progess} />
-            )}
-          </Button>
-          <Grid container>
-            <Grid item>
-              <Link href="signup" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid>
-          {errors.general && (
-            <Typography variant="body2" className={classes.customError}>
-              {errors.general}
-            </Typography>
-          )}
-        </form>
-      </div>
-    </Container>
+    <Flex h="100vh" w="100%" align="center" justifyContent="center">
+      <Box
+        p={10}
+        w="25rem"
+        maxWidth="500px"
+        borderWidth={1}
+        borderRadius={8}
+        boxShadow="lg"
+      >
+        <Box textAlign="center">
+          <Heading>Login</Heading>
+        </Box>
+        <Box my={4} textAlign="left">
+          <form onSubmit={(e) => handleSubmit(e)}>
+            <FormControl isRequired>
+              <FormLabel>Email</FormLabel>
+              <Input
+                type="email"
+                placeholder="test@test.com"
+                size="lg"
+                onChange={(event) =>
+                  setCredentialsState({
+                    ...credentialsState,
+                    email: event.target.value,
+                  })
+                }
+              />
+            </FormControl>
+            <FormControl isRequired mt={6}>
+              <FormLabel>Password</FormLabel>
+              <InputGroup>
+                <Input
+                  type={isVisible ? "text" : "password"}
+                  placeholder="*******"
+                  size="lg"
+                  onChange={(event) =>
+                    setCredentialsState({
+                      ...credentialsState,
+                      password: event.target.value,
+                    })
+                  }
+                />
+                <InputRightElement w="3rem" h="100%">
+                  <Button
+                    h="1.5rem"
+                    size="sm"
+                    onClick={handlePasswordVisibility}
+                  >
+                    {isVisible ? (
+                      <Icon as={ViewOffIcon} />
+                    ) : (
+                      <Icon as={ViewIcon} />
+                    )}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
+            </FormControl>
+            <Button
+              variantColor="teal"
+              variant="outline"
+              type="submit"
+              width="full"
+              mt={4}
+            >
+              {loading ? (
+                <CircularProgress isIndeterminate size="24px" color="teal" />
+              ) : (
+                "Sign In"
+              )}
+            </Button>
+          </form>
+        </Box>
+      </Box>
+    </Flex>
   );
 };
 
-export default withStyles(styles)(Login);
+export default Login;
