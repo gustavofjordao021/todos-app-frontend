@@ -4,13 +4,17 @@ import {
   Box,
   Flex,
   Icon,
+  Alert,
   Input,
   Button,
   Heading,
-  useToast,
   FormLabel,
+  AlertIcon,
+  AlertTitle,
+  CloseButton,
   InputGroup,
   FormControl,
+  AlertDescription,
   InputRightElement,
 } from "@chakra-ui/react";
 
@@ -23,10 +27,13 @@ const Login = (props) => {
     email: "",
     password: "",
   });
+
   const [lifecycleState, setLifecycleState] = useState({
     errors: [],
-    loading: false,
+    isError: false,
+    isLoading: false,
   });
+
   const [showPasswordState, setShowPasswordState] = useState({
     isVisible: false,
   });
@@ -41,32 +48,35 @@ const Login = (props) => {
     return props.history.push("/signup");
   };
 
+  let handleClearError = () => {
+    setLifecycleState({ errors: [], isError: false, isLoading: false });
+  };
+
   let handleSubmit = (event) => {
     event.preventDefault();
-    setLifecycleState({ errors: [], loading: true });
-    const userData = {
+    setLifecycleState({ errors: [], isError: false, isLoading: true });
+    AUTH_SERVICE.login({
       email: credentialsState.email,
       password: credentialsState.password,
-    };
-    AUTH_SERVICE.login(userData)
+    })
       .then((response) => {
         localStorage.setItem("AuthToken", `Bearer ${response.data.token}`);
         setLifecycleState({
-          errors: [],
-          loading: false,
+          ...lifecycleState,
+          isLoading: false,
         });
         return props.history.push("/");
       })
       .catch((error) => {
         setLifecycleState({
           errors: error.response.data,
-          loading: false,
+          isError: true,
+          isLoading: false,
         });
       });
   };
 
-  const toast = useToast();
-  const { errors, loading } = lifecycleState;
+  const { isError, isLoading } = lifecycleState;
   const { isVisible } = showPasswordState;
   return (
     <Flex h="100vh" w="100%" align="center" justifyContent="center">
@@ -126,31 +136,42 @@ const Login = (props) => {
                 </InputRightElement>
               </InputGroup>
             </FormControl>
+            {isError ? (
+              <Alert status="error" mt={2}>
+                <AlertIcon />
+                <Box flex="1">
+                  <AlertTitle>Ops, something went wrong!</AlertTitle>
+                  <AlertDescription display="block">
+                    We can't log you in with those credentials. Please try
+                    again!
+                  </AlertDescription>
+                </Box>
+                <CloseButton
+                  position="absolute"
+                  right="8px"
+                  top="8px"
+                  onClick={() => handleClearError()}
+                />
+              </Alert>
+            ) : (
+              ""
+            )}
             <Button
-              isLoading={loading}
+              isLoading={isLoading}
               loadingText="Submitting"
-              variantColor="blue"
+              colorScheme="blue"
               variant="solid"
               type="submit"
               width="full"
-              mt={4}
+              mt={2}
             >
               Login
             </Button>
-            {Object.keys(errors).length > 0
-              ? toast({
-                  title: "Ops, something went wrong.",
-                  description: `${errors.general}`,
-                  status: "error",
-                  duration: 9000,
-                  isClosable: true,
-                })
-              : ""}
             <Button
-              variantColor="teal"
+              colorScheme="blue"
               variant="outline"
               width="full"
-              mt={4}
+              mt={2}
               onClick={() => handlePushToSignup()}
             >
               Signup

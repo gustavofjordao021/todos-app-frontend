@@ -4,13 +4,17 @@ import {
   Box,
   Flex,
   Icon,
+  Alert,
   Input,
   Button,
   Heading,
+  AlertIcon,
   FormLabel,
+  AlertTitle,
   InputGroup,
   FormControl,
-  CircularProgress,
+  CloseButton,
+  AlertDescription,
   InputRightElement,
 } from "@chakra-ui/react";
 
@@ -28,13 +32,18 @@ const Signup = (props) => {
 
   const [lifecycleState, setLifecycleState] = useState({
     errors: [],
-    loading: false,
+    isError: false,
+    isLoading: false,
   });
 
   const [showPasswordState, setShowPasswordState] = useState({
     isPasswordVisible: false,
     isConfirmPasswordVisible: false,
   });
+
+  let handleClearError = () => {
+    setLifecycleState({ errors: [], isError: false, isLoading: false });
+  };
 
   let handlePasswordVisibility = () => {
     showPasswordState.isPasswordVisible
@@ -60,7 +69,7 @@ const Signup = (props) => {
 
   let handleSubmit = (event) => {
     event.preventDefault();
-    setLifecycleState({ ...lifecycleState, loading: true });
+    setLifecycleState({ ...lifecycleState, isLoading: true });
     const newUserData = {
       username: signupDetailsState.username,
       email: signupDetailsState.email,
@@ -70,18 +79,19 @@ const Signup = (props) => {
     AUTH_SERVICE.signup(newUserData)
       .then((response) => {
         localStorage.setItem("AuthToken", `Bearer ${response.data.token}`);
-        setLifecycleState({ ...lifecycleState, loading: false });
+        setLifecycleState({ ...lifecycleState, isLoading: false });
         return props.history.push("/");
       })
       .catch((error) => {
         setLifecycleState({
           lifecycleState: error.response.data,
-          loading: false,
+          isError: true,
+          isLoading: false,
         });
       });
   };
 
-  const { loading } = lifecycleState;
+  const { isError, isLoading } = lifecycleState;
   const { isPasswordVisible, isConfirmPasswordVisible } = showPasswordState;
   return (
     <Flex h="100vh" w="100%" align="center" justifyContent="center">
@@ -184,22 +194,42 @@ const Signup = (props) => {
                 </InputRightElement>
               </InputGroup>
             </FormControl>
+            {isError ? (
+              <Alert status="error" mt={2}>
+                <AlertIcon />
+                <Box flex="1">
+                  <AlertTitle>Ops, something went wrong!</AlertTitle>
+                  <AlertDescription display="block">
+                    We can't sign you up with those credentials. Please try
+                    again!
+                  </AlertDescription>
+                </Box>
+                <CloseButton
+                  position="absolute"
+                  right="8px"
+                  top="8px"
+                  onClick={() => handleClearError()}
+                />
+              </Alert>
+            ) : (
+              ""
+            )}
             <Button
-              isLoading={loading}
+              isLoading={isLoading}
               loadingText="Submitting"
-              variantColor="blue"
+              colorScheme="blue"
               variant="solid"
               type="submit"
               width="full"
-              mt={4}
+              mt={2}
             >
               Signup
             </Button>
             <Button
-              variantColor="teal"
+              colorScheme="blue"
               variant="outline"
               width="full"
-              mt={4}
+              mt={2}
               onClick={() => handlePushToLogin()}
             >
               Login
