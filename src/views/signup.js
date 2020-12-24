@@ -217,7 +217,7 @@ const Signup = (props) => {
             <Button
               isLoading={isLoading}
               loadingText="Submitting"
-              colorScheme="blue"
+              colorScheme="purple"
               variant="solid"
               type="submit"
               width="full"
@@ -226,7 +226,7 @@ const Signup = (props) => {
               Signup
             </Button>
             <Button
-              colorScheme="blue"
+              colorScheme="purple"
               variant="outline"
               width="full"
               mt={2}
