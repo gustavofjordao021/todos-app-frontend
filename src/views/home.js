@@ -1,33 +1,39 @@
 import React, { useState, useEffect } from "react";
 
+import Navbar from "../views/navbar";
+
+import { Center, Spinner } from "@chakra-ui/react";
+
 import AUTH_SERVICE from "../services/AuthService";
 import USER_SERVICE from "../services/UserService";
 
 const Home = (props) => {
   const [lifecycleState, setLifecycleState] = useState({
-    render: false,
     error: "",
-  });
-  const [userDetailsState, setUserDetailsState] = useState({
-    firstName: "",
-    lastName: "",
-    profilePicture: "",
+    render: false,
     uiLoading: true,
-    imageLoading: false,
   });
 
-  let loadAccountPage = (event) => {
-    setLifecycleState({ render: true });
-  };
+  const [userDetailsState, setUserDetailsState] = useState({
+    email: "",
+    todos: [],
+    lastName: "",
+    username: "",
+    firstName: "",
+  });
 
-  let loadTodoPage = (event) => {
-    setLifecycleState({ render: false });
-  };
+  // let loadAccountPage = (event) => {
+  //   setLifecycleState({ render: true });
+  // };
 
-  let logoutHandler = (event) => {
-    localStorage.removeItem("AuthToken");
-    props.history.push("/login");
-  };
+  // let loadTodoPage = (event) => {
+  //   setLifecycleState({ render: false });
+  // };
+
+  // let logoutHandler = (event) => {
+  //   localStorage.removeItem("AuthToken");
+  //   props.history.push("/login");
+  // };
 
   useEffect(() => {
     AUTH_SERVICE.auth(props.history);
@@ -37,12 +43,9 @@ const Home = (props) => {
           firstName: response.data.userCredentials.firstName,
           lastName: response.data.userCredentials.lastName,
           email: response.data.userCredentials.email,
-          phoneNumber: response.data.userCredentials.phoneNumber,
-          country: response.data.userCredentials.country,
           username: response.data.userCredentials.username,
-          profilePicture: response.data.userCredentials.imageUrl,
-          uiLoading: false,
         });
+        setLifecycleState({ ...lifecycleState, uiLoading: false });
       })
       .catch((error) => {
         if (error.response.status === 403) {
@@ -51,15 +54,35 @@ const Home = (props) => {
         setLifecycleState({
           ...lifecycleState,
           error: "Error in retrieving the data.",
+          uiLoading: false,
         });
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [
+    userDetailsState.firstName,
+    userDetailsState.lastName,
+    userDetailsState.email,
+    userDetailsState.username,
+  ]);
 
-  const { classes } = props;
-  if (userDetailsState.uiLoading === true) {
-  } else {
-  }
+  const { uiLoading } = lifecycleState;
+  return (
+    <>
+      {uiLoading ? (
+        <Center h="100vh">
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="purple.400"
+            size="xl"
+          />
+        </Center>
+      ) : (
+        <Navbar />
+      )}
+    </>
+  );
 };
 
 export default Home;

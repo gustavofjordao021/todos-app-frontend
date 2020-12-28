@@ -1,14 +1,18 @@
 import React, { useState } from "react";
-import { Box, Heading, Flex, Text, Button } from "@chakra-ui/core";
 
-const MenuItems = ({ children }) => (
-  <Text mt={{ base: 4, md: 0 }} mr={6} display="block">
-    {children}
-  </Text>
-);
+import { Box, Flex, Icon, Button, useDisclosure } from "@chakra-ui/react";
+
+import { IoIosAddCircle } from "react-icons/io";
+
+import NavItem from "./navItem";
+import DrawerMenu from "./menu";
+
 const Header = (props) => {
   const [show, setShow] = useState(false);
   const handleToggle = () => setShow(!show);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = React.useRef();
 
   return (
     <Flex
@@ -17,16 +21,11 @@ const Header = (props) => {
       justify="space-between"
       wrap="wrap"
       padding="1.5rem"
-      bg="teal.500"
+      bg="purple.500"
       color="white"
+      boxShadow="xl"
       {...props}
     >
-      <Flex align="center" mr={5}>
-        <Heading as="h1" size="lg" letterSpacing={"-.1rem"}>
-          Chakra UI
-        </Heading>
-      </Flex>
-
       <Box display={{ base: "block", md: "none" }} onClick={handleToggle}>
         <svg
           fill="white"
@@ -45,18 +44,22 @@ const Header = (props) => {
         alignItems="center"
         flexGrow={1}
       >
-        <MenuItems>Docs</MenuItems>
-        <MenuItems>Examples</MenuItems>
-        <MenuItems>Blog</MenuItems>
+        <NavItem onOpen={onOpen} onClose={onClose} ref={btnRef}>
+          menu
+        </NavItem>
+        <NavItem>home</NavItem>
+        <NavItem>settings</NavItem>
       </Box>
-
       <Box
         display={{ sm: show ? "block" : "none", md: "block" }}
         mt={{ base: 4, md: 0 }}
       >
         <Button bg="transparent" border="1px">
-          Create account
+          <Icon w="1.5em" h="1.5em" mr="5px" as={IoIosAddCircle} /> New Todo
         </Button>
+      </Box>
+      <Box>
+        <DrawerMenu isOpen={isOpen} onClose={onClose} />
       </Box>
     </Flex>
   );
