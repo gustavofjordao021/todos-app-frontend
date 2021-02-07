@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import Navbar from "../views/navbar";
-
-import { Center, Spinner } from "@chakra-ui/react";
+import Navbar from "../components/Navbar/Navbar";
 
 import AUTH_SERVICE from "../services/AuthService";
 import USER_SERVICE from "../services/UserService";
@@ -35,52 +33,40 @@ const Home = (props) => {
   //   props.history.push("/login");
   // };
 
-  useEffect(() => {
-    AUTH_SERVICE.auth(props.history);
-    USER_SERVICE.retrieveUserDetails()
-      .then((response) => {
-        setUserDetailsState({
-          firstName: response.data.userCredentials.firstName,
-          lastName: response.data.userCredentials.lastName,
-          email: response.data.userCredentials.email,
-          username: response.data.userCredentials.username,
-        });
-        setLifecycleState({ ...lifecycleState, uiLoading: false });
-      })
-      .catch((error) => {
-        if (error.response.status === 403) {
-          props.history.push("/login");
-        }
-        setLifecycleState({
-          ...lifecycleState,
-          error: "Error in retrieving the data.",
-          uiLoading: false,
-        });
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    userDetailsState.firstName,
-    userDetailsState.lastName,
-    userDetailsState.email,
-    userDetailsState.username,
-  ]);
+  // useEffect(() => {
+  //   AUTH_SERVICE.auth(props.history);
+  //   USER_SERVICE.retrieveUserDetails()
+  //     .then((response) => {
+  //       setUserDetailsState({
+  //         firstName: response.data.userCredentials.firstName,
+  //         lastName: response.data.userCredentials.lastName,
+  //         email: response.data.userCredentials.email,
+  //         username: response.data.userCredentials.username,
+  //       });
+  //       setLifecycleState({ ...lifecycleState, uiLoading: false });
+  //     })
+  //     .catch((error) => {
+  //       if (error.response.status === 403) {
+  //         props.history.push("/login");
+  //       }
+  //       setLifecycleState({
+  //         ...lifecycleState,
+  //         error: "Error in retrieving the data.",
+  //         uiLoading: false,
+  //       });
+  //     });
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [
+  //   userDetailsState.firstName,
+  //   userDetailsState.lastName,
+  //   userDetailsState.email,
+  //   userDetailsState.username,
+  // ]);
 
   const { uiLoading } = lifecycleState;
   return (
     <>
-      {uiLoading ? (
-        <Center h="100vh">
-          <Spinner
-            thickness="4px"
-            speed="0.65s"
-            emptyColor="gray.200"
-            color="purple.400"
-            size="xl"
-          />
-        </Center>
-      ) : (
-        <Navbar />
-      )}
+      <Navbar />
     </>
   );
 };

@@ -1,57 +1,44 @@
 import React, { useState } from "react";
 
-import {
-  Box,
-  Flex,
-  Icon,
-  Alert,
-  Input,
-  Button,
-  Heading,
-  FormLabel,
-  AlertIcon,
-  AlertTitle,
-  CloseButton,
-  InputGroup,
-  FormControl,
-  AlertDescription,
-  InputRightElement,
-} from "@chakra-ui/react";
+// Importing abstracted components
+import Alert from "../components/Alert/Alert";
+import Button from "../components/Button/Button";
 
-import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
-
-import AUTH_SERVICE from "../services/AuthService";
+// Importing service with routes to authorization
+import AUTH_SERVICE from "../services/AuthService.js";
 
 const Login = (props) => {
+  // State to hold credentials on form
   const [credentialsState, setCredentialsState] = useState({
     email: "",
     password: "",
   });
 
+  // State to handle lifecycle changes
   const [lifecycleState, setLifecycleState] = useState({
     errors: [],
     isError: false,
     isLoading: false,
   });
 
+  // State to toggle password visibility
   const [showPasswordState, setShowPasswordState] = useState({
     isVisible: false,
   });
 
+  // Function to toggle password visibility
   let handlePasswordVisibility = () => {
     showPasswordState.isVisible
       ? setShowPasswordState({ isVisible: false })
       : setShowPasswordState({ isVisible: true });
   };
 
+  // Function to route users to Signup page
   let handlePushToSignup = () => {
     return props.history.push("/signup");
   };
 
-  let handleClearError = () => {
-    setLifecycleState({ errors: [], isError: false, isLoading: false });
-  };
-
+  // Function to handle Login credentials submission
   let handleSubmit = (event) => {
     event.preventDefault();
     setLifecycleState({ errors: [], isError: false, isLoading: true });
@@ -60,7 +47,6 @@ const Login = (props) => {
       password: credentialsState.password,
     })
       .then((response) => {
-        localStorage.setItem("AuthToken", `Bearer ${response.data.token}`);
         setLifecycleState({
           ...lifecycleState,
           isLoading: false,
@@ -79,107 +65,111 @@ const Login = (props) => {
   const { isError, isLoading } = lifecycleState;
   const { isVisible } = showPasswordState;
   return (
-    <Flex h="100vh" w="100%" align="center" justifyContent="center">
-      <Box
-        p={10}
-        w="25rem"
-        maxWidth="500px"
-        borderWidth={1}
-        borderRadius={8}
-        boxShadow="lg"
-      >
-        <Box textAlign="center">
-          <Heading>Login</Heading>
-        </Box>
-        <Box my={4} textAlign="left">
-          <form onSubmit={(e) => handleSubmit(e)}>
-            <FormControl isRequired>
-              <FormLabel>Email</FormLabel>
-              <Input
-                type="email"
-                placeholder="test@test.com"
-                size="lg"
-                onChange={(event) =>
-                  setCredentialsState({
-                    ...credentialsState,
-                    email: event.target.value,
-                  })
-                }
-              />
-            </FormControl>
-            <FormControl isRequired mt={6}>
-              <FormLabel>Password</FormLabel>
-              <InputGroup>
-                <Input
-                  type={isVisible ? "text" : "password"}
-                  placeholder="*******"
-                  size="lg"
-                  onChange={(event) =>
+    <>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md w-full space-y-8">
+          <div>
+            <h2 className="mt-6 text-center text-2xl font-extrabold text-gray-900 lg:text-3xl">
+              Sign in to{" "}
+              <span className="relative inline-block">
+                <span className="z-20 relative">Today in History!</span>
+                <div className="bg-indigo-300 absolute w-full h-2 bottom-0.5 z-10"></div>
+              </span>
+            </h2>
+            <p className="mt-2 text-center text-sm text-gray-600">
+              Or
+              <span
+                className="font-medium text-indigo-600 hover:text-indigo-500 cursor-pointer"
+                onClick={() => handlePushToSignup()}
+              >
+                {" "}
+                click here to sign up now!
+              </span>
+            </p>
+          </div>
+          <form className="mt-8 space-y-6" onSubmit={(e) => e.preventDefault()}>
+            <div className="rounded-md shadow-sm -space-y-px">
+              <div>
+                {isError ? (
+                  <Alert
+                    alertMessage={lifecycleState.errors}
+                    alertType={"error"}
+                  />
+                ) : (
+                  ""
+                )}
+                <label for="email-address" className="sr-only">
+                  Email address
+                </label>
+                <input
+                  id="email-address"
+                  name="email"
+                  type="email"
+                  autocomplete="email"
+                  required
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 mb-1 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  placeholder="Email address"
+                  onChange={(e) =>
                     setCredentialsState({
                       ...credentialsState,
-                      password: event.target.value,
+                      email: e.target.value,
                     })
                   }
                 />
-                <InputRightElement w="3rem" h="100%">
-                  <Button
-                    h="1.5rem"
-                    size="sm"
-                    onClick={handlePasswordVisibility}
-                  >
-                    {isVisible ? (
-                      <Icon as={ViewOffIcon} />
-                    ) : (
-                      <Icon as={ViewIcon} />
-                    )}
-                  </Button>
-                </InputRightElement>
-              </InputGroup>
-            </FormControl>
-            {isError ? (
-              <Alert status="error" mt={2}>
-                <AlertIcon />
-                <Box flex="1">
-                  <AlertTitle>Ops, something went wrong!</AlertTitle>
-                  <AlertDescription display="block">
-                    We can't log you in with those credentials. Please try
-                    again!
-                  </AlertDescription>
-                </Box>
-                <CloseButton
-                  position="absolute"
-                  right="8px"
-                  top="8px"
-                  onClick={() => handleClearError()}
+              </div>
+              <div className="flex justify-end">
+                <label for="password" className="sr-only">
+                  Password
+                </label>
+                <input
+                  id="password"
+                  name="password"
+                  type={isVisible ? "string" : "password"}
+                  autocomplete="current-password"
+                  required
+                  className="appearance-none rounded-none relative flex-1 block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 mt-1 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-1 sm:text-sm"
+                  placeholder="Password"
+                  onChange={(e) =>
+                    setCredentialsState({
+                      ...credentialsState,
+                      password: e.target.value,
+                    })
+                  }
                 />
-              </Alert>
-            ) : (
-              ""
-            )}
-            <Button
-              isLoading={isLoading}
-              loadingText="Submitting"
-              colorScheme="purple"
-              variant="solid"
-              type="submit"
-              width="full"
-              mt={2}
-            >
-              Login
-            </Button>
-            <Button
-              colorScheme="purple"
-              variant="outline"
-              width="full"
-              mt={2}
-              onClick={() => handlePushToSignup()}
-            >
-              Signup
-            </Button>
+                <div class="absolute pin-r pin-t mt-3 mr-3 text-purple-lighter ">
+                  {isVisible ? (
+                    <img
+                      src="https://img.icons8.com/ios-filled/30/000000/show-password.png"
+                      alt="password-reveal"
+                      className="cursor-pointer h-6"
+                      onClick={() => {
+                        handlePasswordVisibility();
+                      }}
+                    />
+                  ) : (
+                    <img
+                      src="https://img.icons8.com/ios/30/000000/show-password.png"
+                      alt="password-reveal"
+                      className="cursor-pointer h-6"
+                      onClick={() => {
+                        handlePasswordVisibility();
+                      }}
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
+            <div>
+              <Button
+                clickAction={handleSubmit}
+                clickEffect={isLoading}
+                buttonType={"primary"}
+              />
+            </div>
           </form>
-        </Box>
-      </Box>
-    </Flex>
+        </div>
+      </div>
+    </>
   );
 };
 
