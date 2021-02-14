@@ -4,22 +4,35 @@ import NavItem from "../NavItem/NavItem";
 
 const Navbar = (props) => {
   const [lifecycleState, setLifecycleState] = useState({
-    isMenuVisible: false,
+    isMainMenuVisible: false,
+    isUserMenuVisible: false,
   });
 
   const handleMenuVisibilityToggle = () => {
-    isMenuVisible
+    isMainMenuVisible
       ? setLifecycleState({
           ...lifecycleState,
-          isMenuVisible: false,
+          isMainMenuVisible: false,
         })
       : setLifecycleState({
           ...lifecycleState,
-          isMenuVisible: true,
+          isMainMenuVisible: true,
         });
   };
 
-  const { isMenuVisible } = lifecycleState;
+  const handleUserMenuVisibility = () => {
+    isUserMenuVisible
+      ? setLifecycleState({
+          ...lifecycleState,
+          isUserMenuVisible: false,
+        })
+      : setLifecycleState({
+          ...lifecycleState,
+          isUserMenuVisible: true,
+        });
+  };
+
+  const { isMainMenuVisible, isUserMenuVisible } = lifecycleState;
   return (
     <nav class="bg-gray-800">
       <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
@@ -28,7 +41,16 @@ const Navbar = (props) => {
             <button
               class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
               aria-expanded="false"
-              onClick={() => handleMenuVisibilityToggle()}
+              onFocus={(e) => {
+                if (e.currentTarget === e.target) {
+                  handleMenuVisibilityToggle();
+                }
+              }}
+              onBlur={(e) => {
+                if (!e.currentTarget.contains(e.relatedTarget)) {
+                  handleMenuVisibilityToggle();
+                }
+              }}
             >
               <span class="sr-only">Open main menu</span>
               <svg
@@ -61,6 +83,20 @@ const Navbar = (props) => {
                   d="M6 18L18 6M6 6l12 12"
                 />
               </svg>
+              {isMainMenuVisible ? (
+                <div
+                  class="origin-top-left absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 flex flex-col top-12"
+                  role="menu"
+                  aria-orientation="vertical"
+                  aria-labelledby="nav-menu"
+                >
+                  <NavItem pathURL={"/home"} pathName={"Home"} />
+                  <NavItem pathURL={"/about"} pathName={"About"} />
+                  <NavItem pathURL={"/contactus"} pathName={"Contact us"} />
+                </div>
+              ) : (
+                <span />
+              )}
             </button>
           </div>
           <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
@@ -76,41 +112,60 @@ const Navbar = (props) => {
                 alt="Workflow"
               />
             </div>
-            <div class="hidden sm:block sm:ml-6">
+            <div class="hidden sm:block sm:ml-6 sm:bg-gray-800">
               <div class="flex space-x-4">
-                <NavItem pathURL={"/home"} pathName={"Home"} />
-                <NavItem pathURL={"/about"} pathName={"About"} />
-                <NavItem pathURL={"/contactus"} pathName={"Contact us"} />
+                <NavItem
+                  pathURL={"/home"}
+                  pathName={"Home"}
+                  menuType={"main"}
+                />
+                <NavItem
+                  pathURL={"/about"}
+                  pathName={"About"}
+                  menuType={"main"}
+                />
+                <NavItem
+                  pathURL={"/contactus"}
+                  pathName={"Contact us"}
+                  menuType={"main"}
+                />
               </div>
             </div>
           </div>
-          {isMenuVisible ? (
-            <div
-              class="origin-top-left absolute left-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 flex flex-col top-12"
-              role="menu"
-              aria-orientation="vertical"
-              aria-labelledby="nav-menu"
-            >
-              <NavItem pathURL={"/home"} pathName={"Home"} />
-              <NavItem pathURL={"/about"} pathName={"About"} />
-              <NavItem pathURL={"/contactus"} pathName={"Contact us"} />
-            </div>
-          ) : (
-            <span />
-          )}
           <div class="-ml-5 relative">
             <div>
               <button
-                class="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                class="bg-gray-800 flex text-sm rounded-full ring-2 ring-white hover:rounded-full focus:bg-gray-600 focus:rounded-full"
                 id="user-menu"
                 aria-haspopup="true"
+                onFocus={(e) => {
+                  if (e.currentTarget === e.target) {
+                    handleUserMenuVisibility();
+                  }
+                }}
+                onBlur={(e) => {
+                  if (!e.currentTarget.contains(e.relatedTarget)) {
+                    handleUserMenuVisibility();
+                  }
+                }}
               >
-                <span class="sr-only">Open user menu</span>
-                <img
-                  class="h-8 w-8 rounded-full"
-                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  alt=""
-                />
+                <p className="text-sm font-medium rounded-full text-white px-3 py-2 hover:bg-gray-600">
+                  Profile
+                </p>
+                {isUserMenuVisible ? (
+                  <div
+                    class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 flex flex-col top-12"
+                    role="menu"
+                    aria-orientation="vertical"
+                    aria-labelledby="user-menu"
+                  >
+                    <NavItem pathURL={"/home"} pathName={"Home"} />
+                    <NavItem pathURL={"/about"} pathName={"About"} />
+                    <NavItem pathURL={"/contactus"} pathName={"Contact us"} />
+                  </div>
+                ) : (
+                  <span />
+                )}
               </button>
             </div>
           </div>

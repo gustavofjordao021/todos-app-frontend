@@ -3,6 +3,7 @@ import React, { useState } from "react";
 // Importing abstracted components
 import Alert from "../components/Alert/Alert";
 import Button from "../components/Button/Button";
+import Navbar from "../components/Navbar/Navbar";
 
 // Importing service with routes to authorization
 import AUTH_SERVICE from "../services/AuthService.js";
@@ -66,13 +67,14 @@ const Login = (props) => {
   const { isVisible } = showPasswordState;
   return (
     <>
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <Navbar />
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <div>
             <h2 className="mt-6 text-center text-2xl font-extrabold text-gray-900 lg:text-3xl">
               Sign in to{" "}
               <span className="relative inline-block">
-                <span className="z-20 relative">Today in History!</span>
+                <span className="z-20 relative">Goalify!</span>
                 <div className="bg-indigo-300 absolute w-full h-2 bottom-0.5 z-10"></div>
               </span>
             </h2>

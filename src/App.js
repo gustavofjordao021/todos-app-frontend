@@ -9,7 +9,7 @@ function App() {
   return (
     <div>
       <Router>
-        <div>
+        <div className="min-h-screen">
           <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/login" component={Login} />
