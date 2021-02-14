@@ -5,11 +5,14 @@ import Home from "./views/home";
 import Login from "./views/login";
 import Signup from "./views/signup";
 
+import Navbar from "./components/Navbar/Navbar";
+
 function App() {
   return (
     <div>
       <Router>
-        <div className="min-h-screen">
+        <div className="flex flex-col min-h-screen">
+          <Navbar />
           <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/login" component={Login} />
