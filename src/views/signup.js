@@ -51,7 +51,7 @@ const Signup = (props) => {
   let handleSubmit = (event) => {
     event.preventDefault();
     setLifecycleState({ errors: [], isError: false, isLoading: true });
-    AUTH_SERVICE.login({
+    AUTH_SERVICE.signup({
       email: credentialsState.email,
       password: credentialsState.password,
       confirmPassword: credentialsState.confirmPassword,
