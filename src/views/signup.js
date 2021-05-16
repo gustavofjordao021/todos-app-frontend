@@ -65,7 +65,7 @@ const Signup = (props) => {
       })
       .catch((error) => {
         setLifecycleState({
-          errors: error.response.data,
+          errors: error.response.data.message,
           isError: true,
           isLoading: false,
         });
