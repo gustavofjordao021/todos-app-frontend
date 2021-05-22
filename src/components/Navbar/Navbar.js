@@ -91,7 +91,7 @@ const Navbar = (props) => {
                     aria-orientation="vertical"
                     aria-labelledby="nav-menu"
                   >
-                    <NavItem pathURL={"/home"} pathName={"Home"} />
+                    <NavItem pathURL={"/"} pathName={"Home"} />
                     <NavItem pathURL={"/about"} pathName={"About"} />
                     <NavItem pathURL={"/contactus"} pathName={"Contact us"} />
                   </div>
@@ -114,7 +114,7 @@ const Navbar = (props) => {
               <div className="hidden ml-8 sm:block sm:bg-gray-800">
                 <div className="flex space-x-4">
                   <NavItem
-                    pathURL={"/home"}
+                    pathURL={"/"}
                     pathName={"Home"}
                     menuType={"main"}
                   />

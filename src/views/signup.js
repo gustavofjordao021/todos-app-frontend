@@ -51,25 +51,33 @@ const Signup = (props) => {
   let handleSubmit = (event) => {
     event.preventDefault();
     setLifecycleState({ errors: [], isError: false, isLoading: true });
-    AUTH_SERVICE.signup({
-      email: credentialsState.email,
-      password: credentialsState.password,
-      confirmPassword: credentialsState.confirmPassword,
-    })
-      .then((response) => {
-        setLifecycleState({
-          ...lifecycleState,
-          isLoading: false,
-        });
-        return props.history.push("/");
-      })
-      .catch((error) => {
-        setLifecycleState({
-          errors: error.response.data.message,
-          isError: true,
-          isLoading: false,
-        });
+    if (credentialsState.email.length === 0 || credentialsState.password.length === 0 || credentialsState.confirmPassword.length === 0) {
+      setLifecycleState({
+        errors: "Please confirm all credentials before trying to signup",
+        isError: true,
+        isLoading: false,
       });
+    } else {
+      AUTH_SERVICE.signup({
+        email: credentialsState.email,
+        password: credentialsState.password,
+        confirmPassword: credentialsState.confirmPassword,
+      })
+        .then((response) => {
+          setLifecycleState({
+            ...lifecycleState,
+            isLoading: false,
+          });
+          return props.history.push("/");
+        })
+        .catch((error) => {
+          setLifecycleState({
+            errors: error.response.data.message,
+            isError: true,
+            isLoading: false,
+          });
+        });
+    }        
   };
 
   const { isError, isLoading } = lifecycleState;
