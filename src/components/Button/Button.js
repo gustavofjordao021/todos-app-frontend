@@ -1,8 +1,8 @@
 import React from "react";
 
-// Button component takes 3 props: `clickAction`, `clickEffect`. `buttonType` is the action drilled down from the parent component that the button will perform onClick, `clickEffect` is any lifecycle operation needed to be performed by the button, and `buttonType` is the type of UI needed for the button
+// Button component takes 4 props: `clickAction`, `clickEffect`, and `buttonCTA`. `buttonType` is the action drilled down from the parent component that the button will perform onClick, `clickEffect` is any lifecycle operation needed to be performed by the button, and `buttonType` is the type of UI needed for the button. Finally, `buttonCTA` is the CTA to be displayed on the button
 const Button = (props) => {
-  const { clickAction, clickEffect, buttonType } = props;
+  const { clickAction, clickEffect, buttonType, buttonCTA } = props;
   return (
     <>
       {buttonType === "primary" ? (
@@ -49,7 +49,7 @@ const Button = (props) => {
               </svg>
             )}
           </span>
-          Sign in
+          {buttonCTA}
         </button>
       ) : buttonType === "secondary" ? (
         <button
@@ -97,7 +97,7 @@ const Button = (props) => {
               </svg>
             )}
           </span>
-          Sign in
+          {buttonCTA}
         </button>
       ) : buttonType === "danger" ? (
         <button
@@ -143,7 +143,7 @@ const Button = (props) => {
               </svg>
             )}
           </span>
-          Sign in
+          {buttonCTA}
         </button>
       ) : (
         ""

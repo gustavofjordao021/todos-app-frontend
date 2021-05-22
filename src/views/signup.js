@@ -52,8 +52,8 @@ const Signup = (props) => {
     event.preventDefault();
     setLifecycleState({ errors: [], isError: false, isLoading: true });
     if (credentialsState.email.length === 0 || credentialsState.password.length === 0 || credentialsState.confirmPassword.length === 0) {
-      setLifecycleState({
-        errors: "Please confirm all credentials before trying to signup",
+      setLifecycleState({ 
+        errors: "Please confirm that all credentials are correct before trying to sign up.",
         isError: true,
         isLoading: false,
       });
@@ -236,6 +236,7 @@ const Signup = (props) => {
                 clickAction={handleSubmit}
                 clickEffect={isLoading}
                 buttonType={"primary"}
+                buttonCTA={"Sign up"}
               />
             </div>
           </form>

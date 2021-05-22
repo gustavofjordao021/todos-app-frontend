@@ -41,7 +41,14 @@ const Login = (props) => {
   // Function to handle Login credentials submission
   let handleSubmit = (event) => {
     event.preventDefault();
-    setLifecycleState({ errors: [], isError: false, isLoading: true });
+    if (credentialsState.email.length === 0 || credentialsState.password.length === 0) {
+      setLifecycleState({
+        errors: "Please confirm all credentials before trying to log in.",
+        isError: true,
+        isLoading: false,
+      });
+    } else {
+      setLifecycleState({ errors: [], isError: false, isLoading: true });
     AUTH_SERVICE.login({
       email: credentialsState.email,
       password: credentialsState.password,
@@ -60,6 +67,7 @@ const Login = (props) => {
           isLoading: false,
         });
       });
+    }
   };
 
   const { isError, isLoading } = lifecycleState;
@@ -172,6 +180,7 @@ const Login = (props) => {
                 clickAction={handleSubmit}
                 clickEffect={isLoading}
                 buttonType={"primary"}
+                buttonCTA={"Log in"}
               />
             </div>
           </form>
