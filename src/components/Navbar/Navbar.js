@@ -34,7 +34,7 @@ const Navbar = (props) => {
     <nav className="flex-grow-0 bg-gray-800 z-20">
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <div className="flex justify-between w-full items-center sm:items-stretch">
+          <div className="flex flex-row justify-between w-full items-center sm:items-stretch">
             <div className=" inset-y-0 left-0 flex items-center sm:hidden">
               <button
                 className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
@@ -118,16 +118,24 @@ const Navbar = (props) => {
                 </div>
               </div>
             </div>
-          <Button
-            clickAction={handlePushToSignup}
-            buttonType={"primary"}
-            buttonCTA={"Sign up"} 
-          />
-          <Button
-            clickAction={handlePushToLogin}
-            buttonType={"secondary"}
-            buttonCTA={"Login up"} 
-          />
+            <div className="flex flex-row items-center justify-around w-1/6">
+              <div className="w-full mx-1">
+                <Button                 
+                  clickAction={handlePushToSignup}
+                  clickEffect={"none"}
+                  buttonType={"primary"}
+                  buttonCTA={"Sign up"}
+                />
+              </div>
+              <div className="w-full mx-1">
+                <Button
+                  clickAction={handlePushToLogin}
+                  clickEffect={"none"}
+                  buttonType={"secondary"}
+                  buttonCTA={"Sign in"} 
+                />
+              </div>                            
+            </div>          
           </div>
         </div>
       </div>
