@@ -106,7 +106,7 @@ const Signup = (props) => {
             </p>
           </div>
           <form className="mt-8 space-y-6" onSubmit={(e) => e.preventDefault()}>
-            <div className="rounded-md shadow-sm">
+            <div className="rounded-md">
               <div className="mb-2">
                 {isError ? (
                   <Alert

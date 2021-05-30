@@ -9,7 +9,7 @@ const Navbar = (props) => {
     isUserMenuVisible: false,
   });
 
-  let handlePushToSignup = () => {
+  let handlePushToSignup = () => {    
     return props.history.push("/signup");
   };
 
@@ -32,9 +32,9 @@ const Navbar = (props) => {
   const { isMainMenuVisible } = lifecycleState;
   return (
     <nav className="flex-grow-0 bg-gray-800 z-20">
-      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex flex-row justify-between w-full items-center sm:items-stretch">
+      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-16">
+        <div className="flex items-center justify-between px-4 h-16">
+          <div className="flex flex-row-reverse justify-between w-full items-center sm:items-stretch sm:flex-row">
             <div className=" inset-y-0 left-0 flex items-center sm:hidden">
               <button
                 className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
@@ -83,14 +83,13 @@ const Navbar = (props) => {
                 </svg>
                 {isMainMenuVisible ? (
                   <div
-                    className="origin-top-left absolute left-2 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 flex flex-col top-12"
+                    className="origin-top-right absolute right-4 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 flex flex-col top-12"
                     role="menu"
                     aria-orientation="vertical"
                     aria-labelledby="nav-menu"
                   >
-                    <NavItem pathURL={"/"} pathName={"Home"} />
-                    <NavItem pathURL={"/about"} pathName={"About"} />
-                    <NavItem pathURL={"/contactus"} pathName={"Contact us"} />
+                    <NavItem pathURL={"/signup"} pathName={"Sign up"} menuType={"primary"} />
+                    <NavItem pathURL={"/login"} pathName={"Log in"} menuType={"secondary"} />
                   </div>
                 ) : (
                   <span />
@@ -98,28 +97,21 @@ const Navbar = (props) => {
               </button>
             </div>
             <div className="flex-shrink-0 flex items-center">
+              <a href="/">
               <img
-                className="block lg:hidden h-8 w-auto"
-                src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
-                alt="Workflow"
+                  className="block lg:hidden h-8 w-auto"
+                  src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
+                  alt="Workflow"
               />
-              <img
-                className="hidden lg:block h-8 w-auto"
-                src="https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg"
-                alt="Workflow"
-              />
-              <div className="hidden ml-8 sm:block sm:bg-gray-800">
-                <div className="flex space-x-4">
-                  <NavItem
-                    pathURL={"/"}
-                    pathName={"Home"}
-                    menuType={"main"}
-                  />
-                </div>
-              </div>
+                <img
+                  className="hidden lg:block h-8 w-auto"
+                  src="https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg"
+                  alt="Workflow"
+                /> 
+              </a>             
             </div>
-            <div className="flex flex-row items-center justify-around w-1/6">
-              <div className="w-full mx-1">
+            <div className="flex-row items-center justify-around w-1/6 hidden md:flex">
+              <div className=" w-full mx-1">
                 <Button                 
                   clickAction={handlePushToSignup}
                   clickEffect={"none"}

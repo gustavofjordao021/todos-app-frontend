@@ -4,6 +4,7 @@ import AUTH_SERVICE from "../services/AuthService";
 import USER_SERVICE from "../services/UserService";
 
 import Hero from "../img/hero_img.png";
+import Navbar from "../components/Navbar/Navbar";
 
 const Home = (props) => {
   // const [lifecycleState, setLifecycleState] = useState({
@@ -66,19 +67,20 @@ const Home = (props) => {
   // const { uiLoading } = lifecycleState;
   return (
     <>
-      <div className="flex-grow bg-white min-h-full lg:flex lg:flex-row-reverse lg:items-center lg:justify-center">
-        <div className="md:flex md:justify-center">
+    <Navbar {...props} />
+      <div className="flex flex-col justify-center flex-grow bg-gray-50 min-h-full lg:flex lg:flex-row-reverse lg:items-center lg:justify-center">
+        <div className="flex justify-center">
           <img
-            className="sm:h-72 md:h-96 lg:mx-8"
+            className="p-4 h-60 md:h-72 lg:mx-8"
             src={Hero}
             alt="hero-banner"
           />
         </div>
         <div className="max-w-7xl min-h-full">
-          <div className="relative pb-6 bg-white lg:max-w-2xl lg:w-full">
-            <main className="mt-10 mx-6 max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 xl:mt-28">
+          <div className="relative pb-6 bg-gray-50 lg:max-w-2xl lg:w-full">
+            <main className="mt-2 mx-4 max-w-7xl px-4 sm:mt-12 md:mx-12 md:mt-16 lg:mt-20 xl:mt-28">
               <div className="sm:text-center lg:text-left">
-                <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
+                <h1 className="text-3xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
                   <span className="block xl:inline">Never forget your</span>
                   <span className="block text-indigo-600 xl:inline">
                     {" "}tasks again!
@@ -87,7 +89,7 @@ const Home = (props) => {
                 <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
                   Tale control of your schedule with Goalify so your tasks are never left unchecked on your to-do list again!
                 </p>
-                <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-4 md:text-xl lg:mx-0">
+                <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:block md:mt-4 md:text-xl lg:mx-0">
                   Schedule chores or house tasks with ease, get notifications that actually work for you, and much more at your fingertips.
                 </p>
                 <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">

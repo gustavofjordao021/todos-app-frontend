@@ -96,7 +96,7 @@ const Login = (props) => {
             </p>
           </div>
           <form className="mt-8 space-y-6" onSubmit={(e) => e.preventDefault()}>
-            <div className="rounded-md shadow-sm -space-y-px">
+            <div className="rounded-md -space-y-px">
               <div className="mb-2">
                 {isError ? (
                   <Alert
@@ -118,7 +118,7 @@ const Login = (props) => {
                   type="email"
                   autocomplete="email"
                   required
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 mb-1 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 mb-1 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                   placeholder="Email address"
                   onChange={(e) =>
                     setCredentialsState({
@@ -135,7 +135,7 @@ const Login = (props) => {
                 >
                   Password
                 </label>
-                <div class="mt-1 relative rounded-md shadow-sm">
+                <div class="mt-1 relative rounded-md">
                   <input
                     id="password"
                     name="password"
